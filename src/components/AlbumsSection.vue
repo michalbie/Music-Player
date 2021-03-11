@@ -5,7 +5,8 @@
             <album-cover
                 v-for="album in getAlbums"
                 :key="album"
-                :coverSrc="getCover(album)"
+                :cover-src="getCover(album)"
+                :album-name="album"
             ></album-cover>
         </section>
     </section>

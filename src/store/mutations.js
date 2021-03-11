@@ -6,6 +6,7 @@ const mutations = {
 	},
 	CURRENT_ALBUM_MUTATION(state, data) {
 		state.songs = data.files;
+		state.currentAlbum = data.albumName;
 	},
 	COVERS_MUTATION(state, data) {
 		state.covers = data;

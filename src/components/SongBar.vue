@@ -1,14 +1,17 @@
 <template>
 	<div class="song-bar-wrapper">
         <p class="song-title">{{this.songTitle}}</p>
-        <p class="album-name">{{this.albumName}}</p>
+        <div class="song-data-container">
+            <p class="album-name">{{this.albumName}}</p>
+            <p class="song-size">{{this.size}} MB</p>
+        </div>
 	</div>
 </template>
 
 <script>
 	export default {
 		name: "SongBar",
-		props: ["songTitle", "albumName"],
+		props: ["songTitle", "albumName", "size"],
         computed: {
             getSongTitle(){
                 return this.$store.state.songs.file;
@@ -30,9 +33,19 @@
         background-color: rgba(10, 10, 10, 0.1);
         border-radius: 0.5em;
 
-        .album-name{
-            color: black;
-            opacity: 50%;
+        .song-data-container{
+            display:flex;
+            justify-content: space-around;
+            width: 50%;
+
+            .album-name{
+                color: black;
+                opacity: 50%;
+            }
+
+            .song-size{
+
+            }
         }
     }
 </style>

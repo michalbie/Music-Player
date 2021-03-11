@@ -9,12 +9,15 @@ const actions = {
 				commit("FIRST_INFO_MUTATION", response.data);
 			});
 	},
-	getAlbumInfo({ commit }) {
-		const obj = { body: { action: "NEXT" }, header: "application/json" };
+	getAlbumInfo({ commit }, data) {
+		const obj = {
+			body: { action: "NEXT", albumName: data.albumName },
+			header: "application/json",
+		};
 		axios
 			.post("http://localhost:3000/getMusicStructure", JSON.stringify(obj))
 			.then((response) => {
-				commit("CURRENT_ALBUM_MUTATION", response.data);
+				commit("CURRENT_ALBUM_MUTATION", { ...response.data, albumName: data.albumName });
 			});
 	},
 	getCovers({ commit }) {

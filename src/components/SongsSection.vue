@@ -2,7 +2,7 @@
 	<section id="songs-section">
         <h1>Tracks</h1>
 		<div v-if="isInfoUpdated" id="songs-wrapper">
-            <song-bar v-for="name in this.$store.state.songs" :album-name="$store.state.currentAlbum"  :song-title="name.file" :key="name.file"></song-bar>
+            <song-bar v-for="name in this.$store.state.songs" :album-name="$store.state.currentAlbum"  :song-title="name.file" :size="name.size" :key="name.file"></song-bar>
         </div>
         <h1 v-else>Nie znaleziono</h1>
 	</section>
@@ -33,7 +33,7 @@
         },
         watch: {
             isInfoUpdated () {
-                console.log(`info updated`)
+                //console.log(`info updated`)
             }
         }
 	};

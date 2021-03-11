@@ -15,7 +15,7 @@ const handlePost = (req, res) => {
 		console.log(allData);
 
 		if (obj.body.action == "FIRST") sendOnFirstRequest(res);
-		else if (obj.body.action == "NEXT") sendOnNextRequest(obj.body.albumName);
+		else if (obj.body.action == "NEXT") sendOnNextRequest(res, obj.body.albumName);
 		else if (obj.body.action == "GET_COVERS") sendCovers(res);
 	});
 };
@@ -42,7 +42,9 @@ const sendOnFirstRequest = (res) => {
 
 		files.forEach(function(fileName) {
 			if (fileName.match(/\.mp3/g)) {
-				data["files"].push({ file: fileName });
+				var stats = fs.statSync(__dirname + "/mp3/album1/" + fileName);
+				var fileSizeInMegabytes = stats.size / (1024 * 1024);
+				data["files"].push({ file: fileName, size: fileSizeInMegabytes.toFixed(2) });
 			}
 		});
 
@@ -56,7 +58,7 @@ const sendOnFirstRequest = (res) => {
 	});
 };
 
-const sendOnNextRequest = (album) => {
+const sendOnNextRequest = (res, album) => {
 	let data = {};
 	data["dirs"] = [];
 	data["files"] = [];
@@ -67,8 +69,11 @@ const sendOnNextRequest = (album) => {
 		}
 
 		files.forEach(function(fileName) {
-			//console.log(fileName);
-			data["files"].push({ file: fileName });
+			if (fileName.match(/\.mp3/g)) {
+				var stats = fs.statSync(__dirname + `/mp3/${album}/` + fileName);
+				var fileSizeInMegabytes = stats.size / (1024 * 1024);
+				data["files"].push({ file: fileName, size: fileSizeInMegabytes.toFixed(2) });
+			}
 		});
 
 		//console.log(data);

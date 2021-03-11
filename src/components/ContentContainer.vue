@@ -22,7 +22,7 @@ import SongsSection from './SongsSection.vue';
 <style lang="scss" scoped>
 
     #content-container{
-        background-color: rgba(255,255,255,0.6);
+        background-color: rgba(255,255,255,0.7);
         display: flex;
         flex-direction: column;
         flex: 1;

@@ -1,18 +1,26 @@
 <template>
 	<div class="album-cover-wrapper">
-		<img class="cover-img" v-bind:src="getCoverSrc" />
+		<img class="cover-img" v-bind:src="getCoverSrc" @click="getAlbumData"/>
 	</div>
 </template>
 
 <script>
 	export default {
 		name: "AlbumCover",
-		props: ["coverSrc"],
+		props: ["coverSrc", "albumName"],
 		computed: {
 			getCoverSrc() {
 				return this.coverSrc;
 			},
 		},
+		methods: {
+			getAlbumData: function(){
+				this.$store.dispatch({
+					type: 'getAlbumInfo', 
+					albumName: this.albumName,
+				})
+			}
+		}
 	};
 </script>
 

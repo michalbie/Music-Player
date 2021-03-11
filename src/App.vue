@@ -60,7 +60,7 @@
 			/*background-image: url("./assets/background.jpg");
 			background-size: cover;
 			filter: blur(0px);*/
-			transform:scale(1.02);
+			transform:scale(1.06);
 			background-repeat: no-repeat;
 			position: absolute;
 		}
@@ -72,8 +72,15 @@
 			right: 0;
 			bottom: 0;
 			left: 0;
+			
 			filter: blur(20px);
 		}
+
+		//^ ciekawy trik do paska
+		// top: 0;
+		// 	right: 0;
+		// 	bottom: 200px;
+		// 	left: 0;
 	}
 
 	
