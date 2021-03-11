@@ -37,9 +37,9 @@
 
     #albums-section{
         font-family: 'Ubuntu', sans-serif;
-        font-size: 36px;
+        font-size: 26px;
         margin-left: $left-padding;
-        padding-top: 1em;
+        padding-top: 0.8em;
     }
 
     #covers-section {

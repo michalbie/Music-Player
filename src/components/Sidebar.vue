@@ -14,7 +14,7 @@
 	#sidebar-container{
         position: relative;
         height: 100vh;
-        width: 25em;
+        width: 22em;
         background: rgba(255, 255, 255, 0.2);
     }
 

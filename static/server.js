@@ -11,9 +11,8 @@ const handlePost = (req, res) => {
 	});
 
 	req.on("end", function(data) {
-		
 		var obj = JSON.parse(allData);
-		console.log(allData)
+		console.log(allData);
 
 		if (obj.body.action == "FIRST") sendOnFirstRequest(res);
 		else if (obj.body.action == "NEXT") sendOnNextRequest(obj.body.albumName);
@@ -42,8 +41,9 @@ const sendOnFirstRequest = (res) => {
 		}
 
 		files.forEach(function(fileName) {
-			//console.log(fileName);
-			data["files"].push({ file: fileName });
+			if (fileName.match(/\.mp3/g)) {
+				data["files"].push({ file: fileName });
+			}
 		});
 
 		//console.log(data);
@@ -113,7 +113,7 @@ var server = http.createServer(function(req, res) {
 			break;
 		case "POST":
 			if (req.url == "/getMusicStructure") {
-				console.log("POST")
+				console.log("POST");
 				const postData = handlePost(req, res);
 			} /*else if(req.url == "/getCovers"){
 				console.log("POST COVERS")

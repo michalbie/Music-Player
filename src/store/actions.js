@@ -34,7 +34,7 @@ const actions = {
 
 				Object.keys(response).forEach(async (album) => {
 					let base64String = btoa(
-						String.fromCharCode(...new Uint8Array(response[album].data)) //found on stack overflow... XD Array of bytes to Base64String
+						String.fromCharCode(...new Uint8Array(response[album].data)) //found on stack overflow xd Array of bytes to Base64String
 					);
 					covers[album] = "data:image/jpeg;base64," + base64String;
 				});

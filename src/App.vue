@@ -48,15 +48,31 @@
 			width: 100vw;
 			height: 100vh;
 		}
+		
+		#app-background::before {
+			background: url(./assets/background.jpg) 0 / cover fixed;
+		}
 
 		#app-background{
 			position: absolute;
 			width: 100vw;
 			height: 100vh;
-			background-image: url("./assets/background.jpg");
+			/*background-image: url("./assets/background.jpg");
 			background-size: cover;
+			filter: blur(0px);*/
+			transform:scale(1.02);
 			background-repeat: no-repeat;
 			position: absolute;
+		}
+
+		#app-background::before{
+			content: '';
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			filter: blur(20px);
 		}
 	}
 
