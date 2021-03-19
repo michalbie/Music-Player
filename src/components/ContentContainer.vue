@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import AlbumsSection from './AlbumsSection.vue';
-import SongsSection from './SongsSection.vue';
+import AlbumsSection from './Albums/AlbumsSection.vue';
+import SongsSection from './Songs/SongsSection.vue';
 
 	export default {
 		name: "ContentContainer",

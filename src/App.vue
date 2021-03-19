@@ -7,18 +7,24 @@
 			<sidebar></sidebar>
 			<content-container></content-container>
 		</div>
+		<control-bar></control-bar>
+		<audio-manager id="audio"></audio-manager>
 	</div>
 </template>
 
 <script>	
 	import ContentContainer from "./components/ContentContainer.vue";
 	import Sidebar from "./components/Sidebar.vue";
+	import AudioManager from "./components/AudioManager.vue";
+	import ControlBar from "./components/ControlBar.vue";
 
 	export default {
 		name: "App",
 		components: {
 			"content-container": ContentContainer,
 			"sidebar": Sidebar,
+			"audio-manager": AudioManager,
+			"control-bar": ControlBar,
 		},
 	};
 </script>

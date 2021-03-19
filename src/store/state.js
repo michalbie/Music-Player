@@ -1,8 +1,11 @@
 const state = {
-	songs: [],
-	albums: [],
-	covers: {},
-	currentAlbum: "album1",
+    songs: [],
+    albums: [],
+    covers: {},
+    currentAlbum: "album1",
+    currentAlbumPlaying: "",
+    currentSongPlaying: "",
+    isPlaying: false,
 };
 
 export default state;
