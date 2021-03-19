@@ -4,7 +4,7 @@
 		<div v-if="isInfoUpdated" id="songs-wrapper">
             <song-bar v-for="name in this.$store.state.songs" :album-name="$store.state.currentAlbum"  :song-title="name.file" :size="name.size" :key="name.file"></song-bar>
         </div>
-        <h1 v-else>Nie znaleziono</h1>
+        <h1 v-else id="not-found-info">Nie znaleziono</h1>
 	</section>
 </template>
 
@@ -51,6 +51,12 @@
         #songs-wrapper{
             display: flex;
             flex-direction: column;
+            margin-top: 0.5em;
+        }
+
+        #not-found-info{
+            color: #2b2836;
+            font-size: 1em;
         }
     }
 

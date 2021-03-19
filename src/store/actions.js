@@ -51,7 +51,7 @@ const actions = {
     },
 
     pauseSong({ commit }) {
-        console.log("PAUSE SONG ACTIOn");
+        console.log("PAUSE SONG ACTION");
         document.getElementById("audio").pause();
         commit("PLAYING_STATE_MUTATION", false);
     }

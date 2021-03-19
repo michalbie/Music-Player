@@ -25,36 +25,35 @@ const sendOnFirstRequest = res => {
     data["dirs"] = [];
     data["files"] = [];
 
-    fs.readdir(__dirname + "/mp3", function(err, files) {
+    fs.readdir(__dirname + "/mp3", function(err, dirs) {
         if (err) {
             return console.log(err);
         }
 
-        files.forEach(function(fileName) {
-            data["dirs"].push(fileName);
+        dirs.forEach(function(dirName) {
+            data["dirs"].push(dirName);
         });
-    });
 
-    fs.readdir(__dirname + "/mp3/album1", function(err, files) {
-        if (err) {
-            return console.log(err);
-        }
-
-        files.forEach(function(fileName) {
-            if (fileName.match(/\.mp3/g)) {
-                var stats = fs.statSync(__dirname + "/mp3/album1/" + fileName);
-                var fileSizeInMegabytes = stats.size / (1024 * 1024);
-                data["files"].push({ file: fileName, size: fileSizeInMegabytes.toFixed(2) });
+        fs.readdir(`${__dirname}/mp3/${data.dirs[0]}`, function(err, files) {
+            if (err) {
+                return console.log(err);
             }
-        });
 
-        //console.log(data);
-        res.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
+            files.forEach(function(fileName) {
+                if (fileName.match(/\.mp3/g)) {
+                    var stats = fs.statSync(`${__dirname}/mp3/${data.dirs[0]}/${fileName}`);
+                    var fileSizeInMegabytes = stats.size / (1024 * 1024);
+                    data["files"].push({ file: fileName, size: fileSizeInMegabytes.toFixed(2) });
+                }
+            });
+
+            res.writeHead(200, {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            });
+            res.write(JSON.stringify(data));
+            res.end();
         });
-        res.write(JSON.stringify(data));
-        res.end();
     });
 };
 
@@ -76,7 +75,6 @@ const sendOnNextRequest = (res, album) => {
             }
         });
 
-        //console.log(data);
         res.writeHead(200, {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*"
@@ -122,6 +120,10 @@ var server = http.createServer(function(req, res) {
                     res.write(data);
                     res.end();
                 });
+            } else {
+                res.writeHead(404);
+                res.write("Doesnt exist");
+                res.end();
             }
             break;
 
@@ -129,6 +131,10 @@ var server = http.createServer(function(req, res) {
             if (req.url == "/getMusicStructure") {
                 console.log("POST");
                 const postData = handlePost(req, res);
+            } else {
+                res.writeHead(404);
+                res.write("Doesnt exist");
+                res.end();
             }
             break;
     }

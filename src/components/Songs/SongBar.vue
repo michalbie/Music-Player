@@ -78,8 +78,7 @@
             width: 50%;
 
             .album-name{
-                color: black;
-                opacity: 50%;
+                color: #2b2836;
             }
 
             .song-size{

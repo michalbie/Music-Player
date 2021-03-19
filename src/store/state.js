@@ -2,10 +2,10 @@ const state = {
     songs: [],
     albums: [],
     covers: {},
-    currentAlbum: "album1",
+    currentAlbum: "album2",
     currentAlbumPlaying: "",
     currentSongPlaying: "",
-    isPlaying: false,
+    isPlaying: false
 };
 
 export default state;

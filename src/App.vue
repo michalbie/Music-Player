@@ -79,7 +79,7 @@
 			bottom: 0;
 			left: 0;
 			
-			filter: blur(20px);
+			filter: blur(10px);
 		}
 
 		//^ ciekawy trik do paska
