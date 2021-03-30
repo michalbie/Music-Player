@@ -116,7 +116,8 @@ var server = http.createServer(function(req, res) {
             console.log("GET");
             if (req.url.indexOf(".mp3") != -1) {
                 fs.readFile(__dirname + decodeURI(req.url), function(error, data) {
-                    res.writeHead(200, { "Content-type": "audio/mpeg" });
+                    let stats = fs.statSync(__dirname + decodeURI(req.url));
+                    res.writeHead(200, { "Content-Type": "audio/mpeg", "Content-Length": stats.size, "Accept-Ranges": "bytes" });
                     res.write(data);
                     res.end();
                 });

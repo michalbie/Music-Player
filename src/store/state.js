@@ -5,6 +5,7 @@ const state = {
     currentAlbum: "album2",
     currentAlbumPlaying: "",
     currentSongPlaying: "",
+    playingAlbumSongs: [],
     isPlaying: false
 };
 

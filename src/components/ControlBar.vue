@@ -7,7 +7,18 @@
             <img class="panel-controls" id="next-control" src="../assets/next-control.png" @click="nextSong">
         </section>
         <section id="info-section">
-            <p>{{this.$store.state.currentSongPlaying}}</p>
+            <p v-if="isCurrentSong">{{this.$store.state.currentSongPlaying}}</p>
+            <p v-else>Select track</p>
+        </section>
+
+        <!-- <p id="current-time-info">{{this.getCurrentTime()}}</p> -->
+        <section id="progress-info-container" >
+            <div class="time-info" id="current-time-info">00:00</div>
+            <section id="progress-bar-container" @mousedown="beginSettingTime">
+                <div id="song-length-base"></div>
+                <div id="song-length-current"></div>
+            </section>
+            <div class="time-info" id="duration-time-info">-.-</div>
         </section>
 	</div>
 </template>
@@ -26,6 +37,9 @@
             getAlbumName(){
                 return this.$store.state.currentAlbumPlaying;
             },
+            isCurrentSong(){
+                return this.$store.state.currentSongPlaying ? true : false;
+            }
         },
         methods: {
             playSong: function(){
@@ -44,7 +58,7 @@
             },
 
             getCurrentSongIndex: function(){
-                let songs = this.$store.state.songs;
+                let songs = this.$store.state.playingAlbumSongs;
                 let currentIndex = null;
                 songs.forEach(element => {
                     if(element.file == this.getSongName){
@@ -57,7 +71,8 @@
             nextSong: function(){
                 if(!this.$store.state.currentSongPlaying) return
 
-                let songs = this.$store.state.songs;
+                console.log(this.$store.state.playingAlbumSongs)
+                let songs = this.$store.state.playingAlbumSongs;
                 let currentIndex = this.getCurrentSongIndex();
                 if(currentIndex != songs.length-1){
                     this.$store.dispatch({
@@ -70,7 +85,7 @@
             previousSong: function(){
                 if(!this.$store.state.currentSongPlaying) return
 
-                let songs = this.$store.state.songs;
+                let songs = this.$store.state.playingAlbumSongs;
                 let currentIndex = this.getCurrentSongIndex();
                 if(currentIndex != 0){
                     this.$store.dispatch({
@@ -80,6 +95,31 @@
                     );
                 }
             },
+            setNewTime: function(e){
+                console.log("newTime")
+                let time = (e.layerX / document.getElementById("song-length-base").offsetWidth) * document.getElementById("audio").duration;
+                document.getElementById("audio").currentTime = time;
+                this.updateCurrentTimeUI();
+            },
+            updateCurrentTimeUI: function(){
+                let timeInSeconds = document.getElementById("audio").currentTime;
+                let minutes = (timeInSeconds / 60).toFixed(0).toString().padStart(2, "0");
+                let seconds = (timeInSeconds % 60).toFixed(0).toString().padStart(2, "0");
+                document.getElementById("current-time-info").innerHTML = `${minutes}:${seconds}`;
+            },
+            beginSettingTime: function(e){
+                this.setNewTime(e)
+
+                let newTimeWrapper = (event) => this.setNewTime(event);
+                e.target.addEventListener("mousemove", newTimeWrapper)
+                window.addEventListener("mouseup", () => {
+                    e.target.removeEventListener("mousemove", newTimeWrapper)
+                })
+            },
+            getCurrentTime: function(){
+                let current = document.getElementById("audio").currentTime;
+                return current;
+            }
         },
         watch: {
             isPlaying(){}
@@ -97,6 +137,7 @@
         height: 4em;
         z-index: 20;
         font-family: 'Ubuntu', sans-serif;
+        align-items: center;
 
         #music-control-panel{
             display: flex;
@@ -130,6 +171,52 @@
             display: flex;
             align-items: center;
             color: white;
+            padding: 0 1em 0 0;
+            width: 20em;
+        }
+
+        #progress-info-container{
+            height: 0.5em;
+            width:50em;
+            display: flex;
+            align-items: center;
+
+            .time-info{
+                color: white;
+                width: 3.5em;
+                //text-align: center;
+                align-items: center;
+                padding: 0 0.5em 0 0.5em;
+            }
+
+            #progress-bar-container{
+                position: relative;
+                width: 50em;
+                height: 0.5em;
+                //background-color: red;
+                //padding: 1em 0 1em 0;
+                display: flex;
+                align-items: center;
+
+                #song-length-base{
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    background-color: #5a5a5a;
+                    opacity: 30%;
+                }
+
+                #song-length-current{
+                    position: absolute;
+                    height: 100%;
+                    background-color: #ffffff;
+                    opacity: 30%;
+                }
+            }
+
+            #progress-bar-container:hover{
+                cursor: pointer;
+            }
         }
     }
 </style>

@@ -33,6 +33,8 @@
         },
         methods: {
             playSong: function(){
+                this.$store.state.playingAlbumSongs = this.$store.state.songs;
+                
                 this.$store.dispatch({
                     type:"playSong",
                     songName: this.songTitle,

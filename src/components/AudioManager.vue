@@ -1,5 +1,5 @@
 <template>
-	<audio id="audio-manager" controls>
+	<audio id="audio-manager" controls preload="metadata">
         <source :src="getUrl"
                 id="audio_src"
                 type="audio/mp3" />
@@ -19,9 +19,35 @@
         },
         methods:{
             play: function(){
-                document.getElementById("audio").pause();
-                document.getElementById("audio").load();
-                document.getElementById("audio").play();
+                let convertTimeToString = (timeInSeconds) => {
+                    let minutes = (timeInSeconds / 60).toFixed(0).toString().padStart(2, "0");
+                    let seconds = (timeInSeconds % 60).toFixed(0).toString().padStart(2, "0");
+                    let string = `${minutes}:${seconds}`;
+                    //console.log(timeInSeconds)
+                    return string;
+                }
+
+                let audio = document.getElementById("audio");
+                audio.pause();
+                audio.load();
+                
+                audio.onloadeddata = function (e) {
+                    audio.play();
+                    
+                    e.target.ontimeupdate = function (e) {
+                        let newWidth = (e.target.currentTime / e.target.duration) * document.getElementById("song-length-base").offsetWidth;
+                        document.getElementById("song-length-current").style.width = newWidth + "px";
+
+                        let currentTimeInSeconds = document.getElementById("audio").currentTime;
+                        document.getElementById("current-time-info").innerHTML = convertTimeToString(currentTimeInSeconds);
+                    };
+                };
+
+                audio.onloadedmetadata = function() {
+                    console.log("DURATION " + audio.duration)
+                    let songTimeInSeconds = audio.duration;
+                    document.getElementById("duration-time-info").innerHTML = convertTimeToString(songTimeInSeconds);
+                };
             },
             pause: function(){
                 document.getElementById("audio").pause();
