@@ -78,6 +78,38 @@ const actions = {
                 alert("Track added");
             }
         });
+    },
+
+    removeSongFromPlaylist({ commit, dispatch, state }, data) {
+        const obj = { body: { action: "REMOVE_FROM_PLAYLIST", songData: data }, header: "application/json" };
+        axios.post("http://localhost:3000/modifyPlaylist", JSON.stringify(obj)).then(response => {
+            if (response.data == "Nonexisting Error") {
+                alert("Error. Chosen track not found");
+            } else {
+                commit("PLAYLISTS_MUTATION", response.data);
+
+                //get playlist songs
+                let files = [];
+                state.playlists.forEach(el => {
+                    if (el.playlistName == data.playlistName) {
+                        files = el["files"];
+                    }
+                });
+
+                //update song list
+                if (state.isPlaylistPlaying) {
+                    state.playingAlbumSongs = files;
+                    state.songs = files;
+                }
+
+                //re-render UI
+                dispatch({
+                    type: "showPlaylist",
+                    albumName: data.playlistName,
+                    files: files
+                });
+            }
+        });
     }
 };
 

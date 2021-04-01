@@ -1,8 +1,7 @@
 const getters = {
-	sampleGetter: function(state) {
-		return state.songs;
-	},
-	// kolejne gettery...
+    getPlaylists: function(state) {
+        return state.playlists;
+    }
 };
 
 export default getters;

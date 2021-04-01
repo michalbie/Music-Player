@@ -60,12 +60,20 @@
             getCurrentSongIndex: function(){
                 let songs = this.$store.state.playingAlbumSongs;
                 let currentIndex = null;
+                let found = false;
                 songs.forEach(element => {
                     if(element.file == this.getSongName){
                         currentIndex = songs.indexOf(element);
+                        found = true;
                     }
                 });
-                return currentIndex;
+
+                //if track was removed while being played it cannot be found (return index 0 in this case)
+                if (found){
+                    return currentIndex;
+                } else {
+                    return 0;
+                }
             },
 
             nextSong: function(){
@@ -95,6 +103,7 @@
                     );
                 }
             },
+            
             previousSong: function(){
                 if(!this.$store.state.currentSongPlaying) return
 
@@ -135,6 +144,8 @@
                 let seconds = (timeInSeconds % 60).toFixed(0).toString().padStart(2, "0");
                 document.getElementById("current-time-info").innerHTML = `${minutes}:${seconds}`;
             },
+
+            //this function handles dragging progress bar current time position
             beginSettingTime: function(e){
                 this.setNewTime(e)
 
@@ -144,6 +155,7 @@
                     e.target.removeEventListener("mousemove", newTimeWrapper)
                 })
             },
+
             getCurrentTime: function(){
                 let current = document.getElementById("audio").currentTime;
                 return current;

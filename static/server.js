@@ -149,9 +149,8 @@ const changePlaylistData = (req, res) => {
     req.on("end", function(data) {
         var obj = JSON.parse(allData);
 
-        if (obj.body.action == "ADD_TO_PLAYLIST") {
-            addToPlaylist(obj, res);
-        }
+        if (obj.body.action == "ADD_TO_PLAYLIST") addToPlaylist(obj, res);
+        if (obj.body.action == "REMOVE_FROM_PLAYLIST") removeFromPlaylist(obj, res);
     });
 };
 
@@ -212,6 +211,40 @@ const addToPlaylist = (data, res) => {
             res.write("Duplication Error");
             res.end();
         }
+    });
+};
+
+const removeFromPlaylist = (data, res) => {
+    playlistsDatabase = new Datastore({
+        filename: "playlists.db",
+        autoload: true
+    });
+
+    playlistsDatabase.find({ playlistName: data.body.songData.playlistName }, function(err, docs) {
+        let indexToDelete = null;
+        docs[0].files.forEach(song => {
+            if (song.file == data.body.songData.songName) {
+                indexToDelete = docs[0].files.indexOf(song);
+            }
+        });
+
+        docs[0].files.splice(indexToDelete, 1);
+
+        playlistsDatabase.remove({ playlistName: data.body.songData.playlistName }, function(err, numRemoved) {
+            console.log("deleted " + numRemoved + err);
+        });
+
+        playlistsDatabase.insert(docs[0], function(err, newDoc) {
+            playlistsDatabase.find({}, function(err, docs) {
+                console.log(JSON.stringify(docs, null, 5));
+                res.writeHead(200, {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*"
+                });
+                res.write(JSON.stringify(docs));
+                res.end();
+            });
+        });
     });
 };
 

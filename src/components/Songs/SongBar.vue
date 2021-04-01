@@ -3,6 +3,9 @@
         <div v-if="!isPlaylist" style="display:flex; align-items: center; margin-right: 0.2em;">
             <img class="add-btn" src="../../assets/add.png" @click="togglePlaylistsMenu"/>
         </div>
+        <div v-else style="display:flex; align-items: center; margin-right: 0.2em;">
+            <img class="add-btn" src="../../assets/delete.png" @click="removeSongFromPlaylist"/>
+        </div>
         <div style="display: flex; flex: 1;">
             <img v-if="isCurrentlyPlaying" class="play-btn" src="../../assets/pause.png" @click="pauseSong" />
             <img v-else class="play-btn" src="../../assets/play.png" @click="playSong"/>
@@ -102,6 +105,14 @@
                 } else {
                     popup.style.display = "flex"; 
                 }
+            },
+
+            removeSongFromPlaylist: function(){
+                this.$store.dispatch({
+                    type:"removeSongFromPlaylist",
+                    songName: this.songTitle,
+                    playlistName: this.albumName,
+                });
             }
         },
         components: {
