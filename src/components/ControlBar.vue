@@ -71,14 +71,27 @@
             nextSong: function(){
                 if(!this.$store.state.currentSongPlaying) return
 
-                console.log(this.$store.state.playingAlbumSongs)
                 let songs = this.$store.state.playingAlbumSongs;
                 let currentIndex = this.getCurrentSongIndex();
+                let albumName = this.getAlbumName;
+
+                console.log("currentAlbumPlaying: " + this.$store.state.currentAlbumPlaying)
                 if(currentIndex != songs.length-1){
+                    //if it is a playlist, assign albumName individually for every song (instead of one for all songs)
+                    if(this.$store.state.isPlaylistPlaying == true){
+                        this.$store.state.playlists.forEach(el => {
+                            for(let i = 0; i < el["files"].length; i++){
+                                if( el["files"][i].file == songs[currentIndex+1].file){
+                                    albumName = el["files"][i].albumName
+                                }
+                            }
+                        })
+                    }
+
                     this.$store.dispatch({
                         type:"playSong",
                         songName: songs[currentIndex+1].file,
-                        albumName: this.getAlbumName}
+                        albumName: albumName}
                     );
                 }
             },
@@ -87,20 +100,35 @@
 
                 let songs = this.$store.state.playingAlbumSongs;
                 let currentIndex = this.getCurrentSongIndex();
+                let albumName = this.getAlbumName;
+
                 if(currentIndex != 0){
+                    //if it is a playlist, assign albumName individually for every song (instead of one for all songs)
+                    if(this.$store.state.isPlaylistPlaying == true){
+                        this.$store.state.playlists.forEach(el => {
+                            for(let i = 0; i < el["files"].length; i++){
+                                if( el["files"][i].file == songs[currentIndex-1].file){
+                                    albumName = el["files"][i].albumName
+                                }
+                            }
+                        })
+                    }
+                
                     this.$store.dispatch({
                         type:"playSong",
                         songName: songs[currentIndex - 1].file,
-                        albumName: this.getAlbumName}
+                        albumName: albumName}
                     );
                 }
             },
+
             setNewTime: function(e){
                 console.log("newTime")
                 let time = (e.layerX / document.getElementById("song-length-base").offsetWidth) * document.getElementById("audio").duration;
                 document.getElementById("audio").currentTime = time;
                 this.updateCurrentTimeUI();
             },
+
             updateCurrentTimeUI: function(){
                 let timeInSeconds = document.getElementById("audio").currentTime;
                 let minutes = (timeInSeconds / 60).toFixed(0).toString().padStart(2, "0");

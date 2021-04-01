@@ -35,7 +35,7 @@
             isInfoUpdated () {
                 //console.log(`info updated`)
             }
-        }
+        },
 	};
 </script>
 

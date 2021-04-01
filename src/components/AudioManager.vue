@@ -57,8 +57,8 @@
             }
         },
         watch:{
-            getUrl(newUrl, oldUrl){
-                console.log("New: " + newUrl, "Old: " + oldUrl);
+            getUrl(newUrl){
+                console.log("New: " + newUrl);
                 this.play();
             },
             getPlayingState(newState){

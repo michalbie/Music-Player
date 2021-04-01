@@ -44,6 +44,18 @@ const actions = {
         fetchData();
     },
 
+    getPlaylists({ commit }) {
+        const obj = { body: { action: "GET_PLAYLISTS" }, header: "application/json" };
+        axios.post("http://localhost:3000/getPlaylists", JSON.stringify(obj)).then(response => {
+            commit("PLAYLISTS_MUTATION", response.data);
+        });
+    },
+
+    showPlaylist({ commit }, data) {
+        console.log("DATA: " + data.albumName + data.files);
+        commit("CURRENT_ALBUM_MUTATION", data);
+    },
+
     playSong({ commit }, data) {
         console.log("PLAY SONG ACTION");
         commit("CURRENT_SONG_MUTATION", { songName: data.songName, albumName: data.albumName });
@@ -54,6 +66,18 @@ const actions = {
         console.log("PAUSE SONG ACTION");
         document.getElementById("audio").pause();
         commit("PLAYING_STATE_MUTATION", false);
+    },
+
+    addSongToPlaylist({ commit }, data) {
+        const obj = { body: { action: "ADD_TO_PLAYLIST", songData: data }, header: "application/json" };
+        axios.post("http://localhost:3000/modifyPlaylist", JSON.stringify(obj)).then(response => {
+            if (response.data == "Duplication Error") {
+                alert("Error. This playlist already contains chosen track");
+            } else {
+                commit("PLAYLISTS_MUTATION", response.data);
+                alert("Track added");
+            }
+        });
     }
 };
 

@@ -1,6 +1,24 @@
 var fs = require("fs");
 var http = require("http");
 var qs = require("querystring");
+var Datastore = require("nedb");
+
+var playlistsDatabase = new Datastore({
+    filename: "playlists.db",
+    autoload: true
+});
+
+/*let doc = {
+    playlistName: "Favorite",
+    songsList: {
+        1: {
+            songName: "DrugiAlbumUtwor2.mp3",
+            albumName: "album2"
+        }
+    }
+};
+
+playlistsDatabase.insert(doc, function(err, newDoc) {});*/
 
 const handlePost = (req, res) => {
     var allData = "";
@@ -110,6 +128,93 @@ const sendCovers = res => {
     });
 };
 
+const sendPlaylistsData = res => {
+    playlistsDatabase.find({}, function(err, docs) {
+        res.writeHead(200, {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+        });
+        res.write(JSON.stringify(docs));
+        res.end();
+    });
+};
+
+const changePlaylistData = (req, res) => {
+    var allData = "";
+
+    req.on("data", function(data) {
+        allData += data;
+    });
+
+    req.on("end", function(data) {
+        var obj = JSON.parse(allData);
+
+        if (obj.body.action == "ADD_TO_PLAYLIST") {
+            addToPlaylist(obj, res);
+        }
+    });
+};
+
+const addToPlaylist = (data, res) => {
+    playlistsDatabase = new Datastore({
+        filename: "playlists.db",
+        autoload: true
+    });
+
+    const checkIfIsAdded = async data => {
+        let isAdded = false;
+
+        let found = await new Promise((resolve, reject) => {
+            playlistsDatabase.find({ playlistName: data.body.songData.playlistName }, (err, docs) => {
+                docs[0].files.forEach(el => {
+                    if (el.file == data.body.songData.songName) {
+                        isAdded = true;
+                    }
+                });
+                resolve(isAdded);
+            });
+        });
+
+        return found;
+    };
+
+    playlistsDatabase.find({ playlistName: data.body.songData.playlistName }, async function(err, docs) {
+        if ((await checkIfIsAdded(data)) == false) {
+            let newSongObj = {
+                file: data.body.songData.songName,
+                albumName: data.body.songData.albumName,
+                size: data.body.songData.size
+            };
+
+            docs[0].files.push(newSongObj);
+
+            playlistsDatabase.remove({ playlistName: data.body.songData.playlistName }, {}, function(err, numRemoved) {
+                console.log("usunięto dokumentów: ", numRemoved);
+            });
+
+            playlistsDatabase.insert(docs, function(err, newDoc) {
+                playlistsDatabase.find({}, function(err, docs) {
+                    console.log(JSON.stringify(docs, null, 5));
+                    res.writeHead(200, {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "*"
+                    });
+                    res.write(JSON.stringify(docs));
+                    res.end();
+                });
+            });
+        } else {
+            console.log("ALREADY ADDED");
+            res.writeHead(200, {
+                "Content-Type": "text/plain",
+                "Access-Control-Allow-Origin": "*"
+            });
+            res.write("Duplication Error");
+            res.end();
+        }
+    });
+};
+
 var server = http.createServer(function(req, res) {
     switch (req.method) {
         case "GET":
@@ -130,8 +235,11 @@ var server = http.createServer(function(req, res) {
 
         case "POST":
             if (req.url == "/getMusicStructure") {
-                console.log("POST");
                 const postData = handlePost(req, res);
+            } else if (req.url == "/getPlaylists") {
+                sendPlaylistsData(res);
+            } else if (req.url == "/modifyPlaylist") {
+                changePlaylistData(req, res);
             } else {
                 res.writeHead(404);
                 res.write("Doesnt exist");

@@ -8,20 +8,23 @@ Vue.use(Vuex);
 Vue.config.productionTip = false;
 
 new Vue({
-	store: vuex,
-	render: (h) => h(App),
-	beforeCreate() {
-		this.$store.dispatch("getCovers");
-		this.$store.dispatch("getFirstInfo");
-	},
-	beforeMount() {},
-	mounted() {
-		//this.$store.dispatch("getFirstInfo");
-	},
+    store: vuex,
+    render: h => h(App),
+    beforeCreate() {
+        this.$store.dispatch("getCovers");
+        this.$store.dispatch("getFirstInfo");
+        this.$store.dispatch("getPlaylists");
+    },
+    beforeMount() {},
+    mounted() {
+        //this.$store.dispatch("getFirstInfo");
+    }
 }).$mount("#app");
 
 //TODO
 //add possibility for cover to be png data:png for img
-//add showing another album after click
-//add showing size
-//make responsiveness, change styles
+//make responsiveness
+//remove .mp3 postfix in code
+//add playlists mechanism
+//add default cover
+//54w actions.js skonczylem
