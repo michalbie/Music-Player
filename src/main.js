@@ -22,9 +22,9 @@ new Vue({
 }).$mount("#app");
 
 //TODO
-//add possibility for cover to be png data:png for img
+//add possibility for cover to be png data:png for img and make cover any image inside folder regardless its name (only extension)
 //make responsiveness
+//add default cover
+
 //remove .mp3 postfix in code
 //add playlists mechanism
-//add default cover
-//54w actions.js skonczylem

@@ -2,6 +2,7 @@ var fs = require("fs");
 var http = require("http");
 var qs = require("querystring");
 var Datastore = require("nedb");
+var formidable = require("formidable");
 
 var playlistsDatabase = new Datastore({
     filename: "playlists.db",
@@ -248,6 +249,29 @@ const removeFromPlaylist = (data, res) => {
     });
 };
 
+const uploadFiles = (req, res) => {
+    console.log("Upload...");
+    var dir = __dirname + "/tmp";
+
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+    }
+
+    let form = formidable({});
+    form.keepExtensions = true;
+    form.uploadDir = dir;
+
+    form.parse(req, function(err, fields, files) {
+        fs.rename(files.file.path, `${dir}/${files.file.name}`, function(err) {
+            if (err) console.log(err);
+            console.log("rename ok");
+        });
+
+        res.writeHead(200, { "content-type": "text/plain;charset=utf-8" });
+        res.end("plik zapisany");
+    });
+};
+
 var server = http.createServer(function(req, res) {
     switch (req.method) {
         case "GET":
@@ -257,6 +281,26 @@ var server = http.createServer(function(req, res) {
                     let stats = fs.statSync(__dirname + decodeURI(req.url));
                     res.writeHead(200, { "Content-Type": "audio/mpeg", "Content-Length": stats.size, "Accept-Ranges": "bytes" });
                     res.write(data);
+                    res.end();
+                });
+            } else if (req.url == "/admin") {
+                fs.readFile(__dirname + "/public/admin.html", function(error, data) {
+                    if (error) {
+                        res.writeHead(404);
+                        res.write("File Not Found");
+                    } else {
+                        res.write(data);
+                    }
+                    res.end();
+                });
+            } else if (req.url.indexOf(".js") != -1) {
+                fs.readFile(__dirname + "/public" + req.url, function(error, data) {
+                    if (error) {
+                        res.writeHead(404);
+                        res.write("File Not Found");
+                    } else {
+                        res.write(data);
+                    }
                     res.end();
                 });
             } else {
@@ -273,6 +317,8 @@ var server = http.createServer(function(req, res) {
                 sendPlaylistsData(res);
             } else if (req.url == "/modifyPlaylist") {
                 changePlaylistData(req, res);
+            } else if (req.url == "/uploadFiles") {
+                uploadFiles(req, res);
             } else {
                 res.writeHead(404);
                 res.write("Doesnt exist");
