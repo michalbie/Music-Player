@@ -14,17 +14,15 @@ new Vue({
         this.$store.dispatch("getCovers");
         this.$store.dispatch("getFirstInfo");
         this.$store.dispatch("getPlaylists");
-    },
-    beforeMount() {},
-    mounted() {
-        //this.$store.dispatch("getFirstInfo");
     }
 }).$mount("#app");
 
 //TODO
-//add possibility for cover to be png data:png for img and make cover any image inside folder regardless its name (only extension)
 //make responsiveness
-//add default cover
+//clean code
+//rename dirs
+//
 
 //remove .mp3 postfix in code
 //add playlists mechanism
+
