@@ -36,7 +36,7 @@
 
 	.cover-img {
 		width: 8em;
-		height: auto;
+		height: 8em;
 		border-radius: 1em;
 		box-shadow: 0 0 0.2em black;
 		transition: all 0.5s ease;

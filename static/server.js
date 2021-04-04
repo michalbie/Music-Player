@@ -105,6 +105,7 @@ const sendOnNextRequest = (res, album) => {
 
 const sendCovers = res => {
     const covers = {};
+    const defaultCover = fs.readFileSync(`${__dirname}/defaultCover.jpg`);
 
     fs.readdir(`${__dirname}/mp3`, function(err, albums) {
         if (err) {
@@ -112,12 +113,19 @@ const sendCovers = res => {
         }
         for (i = 0; i <= albums.length - 1; i++) {
             let dir = fs.readdirSync(`${__dirname}/mp3/${albums[i]}`);
+            let hasCover = false;
             dir.forEach(file => {
-                if (file == "cover.jpg") {
+                if (file.indexOf(".jpg") != -1 || file.indexOf(".png") != -1) {
+                    console.log("FILE: " + file);
                     let data = fs.readFileSync(`${__dirname}/mp3/${albums[i]}/${file}`);
                     covers[albums[i]] = data;
+                    hasCover = true;
                 }
             });
+            if (!hasCover) {
+                covers[albums[i]] = defaultCover;
+                console.log("nie ma coveru");
+            }
         }
         res.writeHead(200, {
             "Content-Type": "application/json",
@@ -251,10 +259,18 @@ const removeFromPlaylist = (data, res) => {
 
 const uploadFiles = (req, res) => {
     console.log("Upload...");
-    var dir = __dirname + "/tmp";
+    let currentIndex = "1";
+    var dir = __dirname + "/mp3/Album" + currentIndex; //try this first
+    let isCreated = false;
 
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
+    while (isCreated == false) {
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir);
+            isCreated = true;
+        } else {
+            currentIndex++;
+            dir = __dirname + "/mp3/Album" + currentIndex;
+        }
     }
 
     let form = formidable({});
@@ -262,13 +278,20 @@ const uploadFiles = (req, res) => {
     form.uploadDir = dir;
 
     form.parse(req, function(err, fields, files) {
-        fs.rename(files.file.path, `${dir}/${files.file.name}`, function(err) {
-            if (err) console.log(err);
-            console.log("rename ok");
+        res.writeHead(200, { "Content-Type": "application/json" });
+        response = {};
+        Object.keys(files).forEach(key => {
+            fs.renameSync(files[key].path, `${dir}/${files[key].name}`, function(err) {
+                if (err) console.log(err);
+            });
+            response[key] = {
+                name: files[key].name,
+                size: files[key].size,
+                albumName: "Album" + currentIndex
+            };
         });
 
-        res.writeHead(200, { "content-type": "text/plain;charset=utf-8" });
-        res.end("plik zapisany");
+        res.end(JSON.stringify(response));
     });
 };
 

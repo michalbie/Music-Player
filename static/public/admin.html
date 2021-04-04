@@ -24,25 +24,43 @@
                 justify-content: center;
                 font-size: 5em;
                 height: 35%;
+                border: 10px dotted black;
             }
 
             #sent-files-preview-area {
                 display: flex;
                 position: relative;
-                background-color: red;
                 height: 65%;
                 align-items: center;
                 justify-content: center;
                 font-size: 2em;
+                flex-direction: column;
+            }
+
+            .song-info-container {
+                display: flex;
+                justify-content: space-between;
+                background-color: lightblue;
+                opacity: 90%;
+                width: 100%;
+                height: 2em;
+                padding: 0.5em 0.5em 0.5em 0.5em;
+                margin-top: 0.5em;
+            }
+
+            .info-element {
+                padding: 0.5em;
             }
         </style>
     </head>
     <body>
         <section id="upload-area">
-            <p>Drag your files here</p>
+            <p id="upload-text">Drag your files here</p>
         </section>
         <section id="sent-files-preview-area">
-            <p id="no-upload-info">Nothing uploaded yet</p>
+            <div>
+                <p id="no-upload-info">Nothing uploaded yet</p>
+            </div>
         </section>
     </body>
 </html>
