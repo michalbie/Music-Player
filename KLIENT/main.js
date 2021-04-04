@@ -20,9 +20,6 @@ new Vue({
 //TODO
 //make responsiveness
 //clean code
-//rename dirs
-//
 
 //remove .mp3 postfix in code
 //add playlists mechanism
-
