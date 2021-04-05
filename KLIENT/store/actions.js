@@ -8,6 +8,7 @@ const actions = {
         });
     },
     getAlbumInfo({ commit }, data) {
+        console.log(JSON.stringify(data.albumName, null, 5));
         const obj = {
             body: { action: "NEXT", albumName: data.albumName },
             header: "application/json"
@@ -32,10 +33,10 @@ const actions = {
                 let covers = {};
 
                 Object.keys(response).forEach(async album => {
-                    let base64String = btoa(
-                        String.fromCharCode(...new Uint8Array(response[album].data)) //found on stack overflow xd Array of bytes to Base64String
-                    );
-                    covers[album] = "data:image/png;base64," + base64String;
+                    // let base64String = btoa(
+                    //     String.fromCharCode(...new Uint8Array(response[album].data)) //found on stack overflow xd Array of bytes to Base64String
+                    // );
+                    covers[album] = response[album];
                 });
                 commit("COVERS_MUTATION", covers);
             }

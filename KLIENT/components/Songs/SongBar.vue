@@ -6,7 +6,7 @@
         <div v-else style="display:flex; align-items: center; margin-right: 0.2em;">
             <img class="add-btn" src="../../assets/delete.png" @click="removeSongFromPlaylist"/>
         </div>
-        <div style="display: flex; flex: 1;">
+        <div style="display: flex; flex: 1; align-items: center;">
             <img v-if="isCurrentlyPlaying" class="play-btn" src="../../assets/pause.png" @click="pauseSong" />
             <img v-else class="play-btn" src="../../assets/play.png" @click="playSong"/>
             <p class="song-title">{{this.songTitle}}</p>
@@ -139,7 +139,7 @@
 
         .play-btn{
             width: 1em;
-            height: auto;
+            height: 1em;
             transition: all 0.5s ease;
         }
 

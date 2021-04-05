@@ -105,7 +105,6 @@ const sendOnNextRequest = (res, album) => {
 
 const sendCovers = res => {
     const covers = {};
-    const defaultCover = fs.readFileSync(`${__dirname}/defaultCover.jpg`);
 
     fs.readdir(`${__dirname}/mp3`, function(err, albums) {
         if (err) {
@@ -116,22 +115,19 @@ const sendCovers = res => {
             let hasCover = false;
             dir.forEach(file => {
                 if (file.indexOf(".jpg") != -1 || file.indexOf(".png") != -1) {
-                    console.log("FILE: " + file);
-                    let data = fs.readFileSync(`${__dirname}/mp3/${albums[i]}/${file}`);
-                    covers[albums[i]] = data;
+                    covers[albums[i]] = `http://localhost:3000/mp3/${albums[i]}/${file}`;
                     hasCover = true;
                 }
             });
             if (!hasCover) {
-                covers[albums[i]] = defaultCover;
-                console.log("nie ma coveru");
+                covers[albums[i]] = "http://localhost:3000/defaultCover.jpg";
+                console.log("No cover. Setting default.");
             }
         }
         res.writeHead(200, {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*"
         });
-        //console.log(JSON.stringify(covers))
         res.write(JSON.stringify(covers));
         res.end();
     });
@@ -278,6 +274,7 @@ const uploadFiles = (req, res) => {
     form.uploadDir = dir;
 
     form.parse(req, function(err, fields, files) {
+        console.log("Uploading: " + JSON.stringify(files, null, 5));
         res.writeHead(200, { "Content-Type": "application/json" });
         response = {};
         Object.keys(files).forEach(key => {
@@ -318,6 +315,17 @@ var server = http.createServer(function(req, res) {
                 });
             } else if (req.url.indexOf(".js") != -1) {
                 fs.readFile(__dirname + "/public" + req.url, function(error, data) {
+                    if (error) {
+                        res.writeHead(404);
+                        res.write("File Not Found");
+                    } else {
+                        res.write(data);
+                    }
+                    res.end();
+                });
+            } else if (req.url.indexOf(".jpg") != -1 || req.url.indexOf(".png") != -1) {
+                fs.readFile(__dirname + decodeURI(req.url), function(error, data) {
+                    console.log(__dirname + decodeURI(req.url));
                     if (error) {
                         res.writeHead(404);
                         res.write("File Not Found");
