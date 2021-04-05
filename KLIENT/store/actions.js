@@ -33,9 +33,6 @@ const actions = {
                 let covers = {};
 
                 Object.keys(response).forEach(async album => {
-                    // let base64String = btoa(
-                    //     String.fromCharCode(...new Uint8Array(response[album].data)) //found on stack overflow xd Array of bytes to Base64String
-                    // );
                     covers[album] = response[album];
                 });
                 commit("COVERS_MUTATION", covers);
