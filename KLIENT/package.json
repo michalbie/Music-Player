@@ -13,6 +13,7 @@
     "formidable": "^1.2.2",
     "nedb": "^1.8.0",
     "vue": "^2.6.11",
+    "vue-perfect-scrollbar": "^0.2.1",
     "vuex": "^3.6.2"
   },
   "devDependencies": {

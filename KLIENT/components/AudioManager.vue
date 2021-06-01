@@ -23,7 +23,6 @@
                     let minutes = (timeInSeconds / 60).toFixed(0).toString().padStart(2, "0");
                     let seconds = (timeInSeconds % 60).toFixed(0).toString().padStart(2, "0");
                     let string = `${minutes}:${seconds}`;
-                    //console.log(timeInSeconds)
                     return string;
                 }
 
