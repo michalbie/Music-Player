@@ -1,6 +1,6 @@
 <template>
     <section id="songs-section">
-        <h1>Tracks</h1>
+        <h1 id="tracks-header">Tracks</h1>
         <vue-perfect-scrollbar id="overflow-wrapper" ref="scrollbarContainer">
             <div v-if="isInfoUpdated" id="songs-wrapper">
                 <song-bar
@@ -59,6 +59,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../styles/mixins.scss";
 $left-padding: 0.8em;
 
 #songs-section {
@@ -68,6 +69,24 @@ $left-padding: 0.8em;
     padding-top: 0.8em;
     padding-bottom: 5em;
     overflow: hidden;
+
+    @include h500 {
+        padding-bottom: 3em;
+    }
+
+    @include w767P {
+        padding-top: 0;
+    }
+
+    #tracks-header {
+        @include h500 {
+            display: none;
+        }
+
+        @include w767P {
+            font-size: 1.2em;
+        }
+    }
 
     #overflow-wrapper {
         height: 100%;

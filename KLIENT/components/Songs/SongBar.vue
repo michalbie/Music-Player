@@ -6,7 +6,7 @@
         <div v-else style="display:flex; align-items: center; margin-right: 0.2em;">
             <img class="add-btn" src="../../assets/delete.png" @click="removeSongFromPlaylist" />
         </div>
-        <div style="display: flex; flex: 1; align-items: center;">
+        <div class="first-half-wrapper">
             <img v-if="isCurrentlyPlaying" class="play-btn" src="../../assets/pause.png" @click="pauseSong" />
             <img v-else class="play-btn" src="../../assets/play.png" @click="playSong" />
             <p class="song-title">{{ this.songTitle }}</p>
@@ -48,7 +48,8 @@ export default {
         isPlaylist() {
             let isPlaylist = false;
             this.$store.state.playlists.forEach(el => {
-                if (el.playlistName == this.albumName) {
+                if (el.playlistName == this.albumName.replace(/\s/g, "")) {
+                    //innerHTML contains spaces - I delete them
                     isPlaylist = true;
                 }
             });
@@ -59,10 +60,13 @@ export default {
         playSong: function() {
             this.$store.state.playingAlbumSongs = this.$store.state.songs;
             let albumName = this.albumName;
+            if (this.albumName[0] == " " && this.albumName[this.albumName.length - 1] == " ") {
+                albumName = this.albumName.slice(1, this.albumName.length - 1);
+            }
 
             //if it is a playlist, assign album name individually for every song (instead of one for all songs)
             this.$store.state.playlists.forEach(el => {
-                if (el.playlistName == this.albumName) {
+                if (el.playlistName == albumName) {
                     this.$store.state.isPlaylistPlaying = true;
                     this.$store.state.currentPlaylistPlaying = el.playlistName;
                     for (let i = 0; i < el["files"].length; i++) {
@@ -115,7 +119,7 @@ export default {
             this.$store.dispatch({
                 type: "removeSongFromPlaylist",
                 songName: this.songTitle,
-                playlistName: this.albumName
+                playlistName: this.albumName.replace(/\s/g, "")
             });
         }
     },
@@ -132,6 +136,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../styles/mixins.scss";
+
 .song-bar-wrapper {
     position: relative;
     display: flex;
@@ -142,15 +148,44 @@ export default {
     border-radius: 0.5em;
     margin-right: 0.5em;
 
-    .play-btn {
-        width: 1em;
-        height: 1em;
-        transition: all 0.5s ease;
+    @include w700 {
+        font-size: 0.8em;
     }
 
-    .play-btn:hover {
-        cursor: pointer;
-        transform: scale(1.1);
+    @include w767P {
+        font-size: 0.8em;
+    }
+
+    .first-half-wrapper {
+        display: flex;
+        flex: 1;
+        align-items: center;
+
+        @include w767P {
+            overflow: hidden;
+        }
+
+        .play-btn {
+            width: 1em;
+            height: 1em;
+            transition: all 0.5s ease;
+        }
+
+        .play-btn:hover {
+            cursor: pointer;
+            transform: scale(1.1);
+        }
+
+        .song-title {
+            margin-left: 0.5em;
+            font-size: 0.8em;
+
+            @include w767P {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
     }
 
     .add-btn {
@@ -164,21 +199,44 @@ export default {
         transform: scale(1.1);
     }
 
-    .song-title {
-        margin-left: 0.5em;
-    }
-
     .song-data-container {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         margin-left: 4em;
-        width: 50%;
+        width: 30%;
+        font-size: 0.8em;
+
+        @include w1500 {
+            justify-content: flex-end;
+        }
+
+        @include w1024P {
+            justify-content: flex-end;
+        }
+
+        @include w767P {
+            display: none;
+        }
 
         .album-name {
             color: #2b2836;
+
+            @include w767P {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
         }
 
         .song-size {
+            @include w1500 {
+                display: none;
+            }
+
+            @include w1024P {
+                display: none;
+            }
         }
     }
 }

@@ -6,10 +6,6 @@
             <img v-else class="panel-controls" id="play-control" src="../assets/play-control.png" @click="playSong" />
             <img class="panel-controls" id="next-control" src="../assets/next-control.png" @click="nextSong" />
         </section>
-        <section id="info-section">
-            <p v-if="isCurrentSong">{{ this.$store.state.currentSongPlaying }}</p>
-            <p v-else>Select track</p>
-        </section>
 
         <!-- <p id="current-time-info">{{this.getCurrentTime()}}</p> -->
         <section id="progress-info-container">
@@ -19,6 +15,11 @@
                 <div id="song-length-current"></div>
             </section>
             <div class="time-info" id="duration-time-info">-.-</div>
+        </section>
+
+        <section id="info-section">
+            <p v-if="isCurrentSong">{{ this.$store.state.currentSongPlaying }}</p>
+            <p v-else>Select track</p>
         </section>
     </div>
 </template>
@@ -173,6 +174,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "./styles/mixins.scss";
+
 #control-bar-container {
     position: absolute;
     bottom: 0;
@@ -183,17 +186,44 @@ export default {
     z-index: 20;
     font-family: "Ubuntu", sans-serif;
     align-items: center;
+    justify-content: space-around;
+
+    @include w1024P {
+        font-size: 0.9em;
+    }
+
+    @include w767P {
+        flex-direction: column-reverse;
+        height: 10em;
+        align-items: center;
+    }
 
     #music-control-panel {
         display: flex;
         position: relative;
         align-items: center;
         padding: 0 1em 0 1em;
+        margin-right: auto;
+
+        @include w767P {
+            margin-right: 0;
+        }
 
         .panel-controls {
             width: 1.2em;
             height: 1.2em;
             margin-right: 1em;
+
+            @include w1024P {
+                width: 1em;
+                height: 1em;
+            }
+
+            @include w767P {
+                width: 1.5em;
+                height: 1.5em;
+                margin-bottom: 1em;
+            }
         }
 
         .panel-controls:hover {
@@ -204,6 +234,16 @@ export default {
             width: 2.5em;
             height: 2.5em;
             transition: all 0.5s ease;
+
+            @include w1024P {
+                width: 2em;
+                height: 2em;
+            }
+
+            @include w767P {
+                width: 2.5em;
+                height: 2.5em;
+            }
         }
 
         #play-control:hover {
@@ -217,7 +257,22 @@ export default {
         align-items: center;
         color: white;
         padding: 0 1em 0 0;
-        width: 20em;
+        width: 30em;
+        overflow: hidden;
+        justify-content: flex-end;
+
+        @include w767P {
+            justify-content: center;
+            margin-top: 1em;
+            width: 90vw;
+            padding: 0;
+        }
+
+        > p {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
     }
 
     #progress-info-container {
@@ -225,6 +280,25 @@ export default {
         width: 50em;
         display: flex;
         align-items: center;
+        margin-right: auto;
+
+        @include w1120 {
+            width: 30em;
+        }
+
+        @include w700 {
+            width: 15em;
+        }
+
+        @include w1024P {
+            width: 30em;
+        }
+
+        @include w767P {
+            margin-right: 0;
+            width: 90vw;
+            margin: 1em 0 1em 0;
+        }
 
         .time-info {
             color: white;
@@ -242,6 +316,10 @@ export default {
             //padding: 1em 0 1em 0;
             display: flex;
             align-items: center;
+
+            @include w767P {
+                margin: 1em 0 1em 0;
+            }
 
             #song-length-base {
                 position: absolute;

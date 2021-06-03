@@ -1,6 +1,6 @@
 <template>
     <section id="albums-section">
-        <h1>Albums</h1>
+        <h1 id="albums-header">Albums</h1>
         <vue-perfect-scrollbar id="covers-section" ref="scrollbarContainer">
             <album-cover v-for="album in getAlbums" :key="album" :cover-src="getCover(album)" :album-name="album"></album-cover>
         </vue-perfect-scrollbar>
@@ -38,6 +38,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../styles/mixins.scss";
+
 $left-padding: 0.8em;
 
 #albums-section {
@@ -45,6 +47,16 @@ $left-padding: 0.8em;
     font-size: 26px;
     margin-left: $left-padding;
     padding-top: 0.8em;
+
+    #albums-header {
+        @include h500 {
+            display: none;
+        }
+
+        @include w767P {
+            font-size: 1.2em;
+        }
+    }
 }
 
 #covers-section {

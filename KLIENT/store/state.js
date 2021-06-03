@@ -2,7 +2,7 @@ const state = {
     songs: [],
     albums: [],
     covers: {},
-    playlists: ["Favorite"],
+    playlists: ["Favorite", "Moody", "Cheerful"],
     isPlaylistPlaying: false,
     currentPlaylistPlaying: null,
     currentAlbum: "",

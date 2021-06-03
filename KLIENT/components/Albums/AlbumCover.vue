@@ -1,50 +1,70 @@
 <template>
-	<div class="album-cover-wrapper">
-		<img class="cover-img" v-bind:src="getCoverSrc" @click="getAlbumData"/>
-	</div>
+    <div class="album-cover-wrapper">
+        <img class="cover-img" v-bind:src="getCoverSrc" @click="getAlbumData" />
+    </div>
 </template>
 
 <script>
-	export default {
-		name: "AlbumCover",
-		props: ["coverSrc", "albumName"],
-		computed: {
-			getCoverSrc() {
-				return this.coverSrc;
-			},
-		},
-		methods: {
-			getAlbumData: function(){
-				this.$store.dispatch({
-					type: 'getAlbumInfo', 
-					albumName: this.albumName,
-				})
-			}
-		}
-	};
+export default {
+    name: "AlbumCover",
+    props: ["coverSrc", "albumName"],
+    computed: {
+        getCoverSrc() {
+            return this.coverSrc;
+        }
+    },
+    methods: {
+        getAlbumData: function() {
+            this.$store.dispatch({
+                type: "getAlbumInfo",
+                albumName: this.albumName
+            });
+        }
+    }
+};
 </script>
 
 <style lang="scss" scoped>
-    $left-padding: 0.8em;
+@import "../styles/mixins.scss";
+$left-padding: 0.8em;
 
-	.album-cover-wrapper {
-		display: flex;
-		align-items:center;
-		justify-content: center;
-		padding: 0.8em 0.8em 0.8em 0.2em;
-	}
+.album-cover-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8em 0.8em 0.8em 0.2em;
 
-	.cover-img {
-		width: 8em;
-		height: 8em;
-		border-radius: 1em;
-		box-shadow: 0 0 0.2em black;
-		transition: all 0.5s ease;
-	}
+    @include h700 {
+        padding: 0.5em 0.5em 0.5em 0.2em;
+    }
+}
 
-	.cover-img:hover{
-		cursor: pointer;
-		transform: scale(1.02)
-	}
+.cover-img {
+    width: 8em;
+    height: 8em;
+    border-radius: 1em;
+    box-shadow: 0 0 0.2em black;
+    transition: all 0.5s ease;
 
+    @include h700 {
+        width: 4em;
+        height: 4em;
+        border-radius: 0.5em;
+    }
+
+    @include w767P {
+        width: 4em;
+        height: 4em;
+        border-radius: 0.5em;
+    }
+}
+
+.cover-img:hover {
+    cursor: pointer;
+    transform: scale(1.02);
+
+    @include h700 {
+        transform: scale(1.1);
+    }
+}
 </style>
