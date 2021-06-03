@@ -213,7 +213,6 @@ export default {
         .panel-controls {
             width: 1.2em;
             height: 1.2em;
-            //margin-right: 1em;
 
             @include w1024P {
                 width: 1em;
@@ -304,7 +303,6 @@ export default {
         .time-info {
             color: white;
             width: 3.5em;
-            //text-align: center;
             align-items: center;
             padding: 0 0.5em 0 0.5em;
         }
@@ -313,8 +311,6 @@ export default {
             position: relative;
             width: 50em;
             height: 0.5em;
-            //background-color: red;
-            //padding: 1em 0 1em 0;
             display: flex;
             align-items: center;
 

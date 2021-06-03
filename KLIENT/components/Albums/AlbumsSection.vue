@@ -86,7 +86,6 @@ $left-padding: 0.8em;
 #covers-section {
     display: flex;
     transition: all 1s ease-in;
-    // flex-wrap: wrap;
     position: relative;
     z-index: 3;
     overflow-x: auto;

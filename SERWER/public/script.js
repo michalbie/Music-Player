@@ -68,7 +68,7 @@ document.querySelector("#upload-area").ondrop = function(e) {
             console.log("response: " + JSON.stringify(data));
             showUploadedFiles(data);
         }) // odesłane z serwera dane
-        .catch(error => console.log(error)); // ew błąd
+        .catch(error => console.log(error)); 
 };
 
 console.log("JS zaladowany");

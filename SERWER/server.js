@@ -6,7 +6,7 @@ var formidable = require("formidable");
 
 var playlistsDatabase = new Datastore({
     filename: "playlists.db",
-    autoload: true
+    autoload: true,
 });
 
 /*let doc = {
@@ -25,11 +25,11 @@ const handlePost = (req, res) => {
     var allData = "";
     var finish = null;
 
-    req.on("data", function(data) {
+    req.on("data", function (data) {
         allData += data;
     });
 
-    req.on("end", function(data) {
+    req.on("end", function (data) {
         var obj = JSON.parse(allData);
         console.log(allData);
 
@@ -39,26 +39,26 @@ const handlePost = (req, res) => {
     });
 };
 
-const sendOnFirstRequest = res => {
+const sendOnFirstRequest = (res) => {
     let data = {};
     data["dirs"] = [];
     data["files"] = [];
 
-    fs.readdir(__dirname + "/mp3", function(err, dirs) {
+    fs.readdir(__dirname + "/mp3", function (err, dirs) {
         if (err) {
             return console.log(err);
         }
 
-        dirs.forEach(function(dirName) {
+        dirs.forEach(function (dirName) {
             data["dirs"].push(dirName);
         });
 
-        fs.readdir(`${__dirname}/mp3/${data.dirs[0]}`, function(err, files) {
+        fs.readdir(`${__dirname}/mp3/${data.dirs[0]}`, function (err, files) {
             if (err) {
                 return console.log(err);
             }
 
-            files.forEach(function(fileName) {
+            files.forEach(function (fileName) {
                 if (fileName.match(/\.mp3/g)) {
                     var stats = fs.statSync(`${__dirname}/mp3/${data.dirs[0]}/${fileName}`);
                     var fileSizeInMegabytes = stats.size / (1024 * 1024);
@@ -68,7 +68,7 @@ const sendOnFirstRequest = res => {
 
             res.writeHead(200, {
                 "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
             });
             res.write(JSON.stringify(data));
             res.end();
@@ -81,12 +81,12 @@ const sendOnNextRequest = (res, album) => {
     data["dirs"] = [];
     data["files"] = [];
 
-    fs.readdir(__dirname + "/mp3/" + album, function(err, files) {
+    fs.readdir(__dirname + "/mp3/" + album, function (err, files) {
         if (err) {
             return console.log(err);
         }
 
-        files.forEach(function(fileName) {
+        files.forEach(function (fileName) {
             if (fileName.match(/\.mp3/g)) {
                 var stats = fs.statSync(__dirname + `/mp3/${album}/` + fileName);
                 var fileSizeInMegabytes = stats.size / (1024 * 1024);
@@ -96,24 +96,24 @@ const sendOnNextRequest = (res, album) => {
 
         res.writeHead(200, {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
+            "Access-Control-Allow-Origin": "*",
         });
         res.write(JSON.stringify(data));
         res.end();
     });
 };
 
-const sendCovers = res => {
+const sendCovers = (res) => {
     const covers = {};
 
-    fs.readdir(`${__dirname}/mp3`, function(err, albums) {
+    fs.readdir(`${__dirname}/mp3`, function (err, albums) {
         if (err) {
             return console.log(err);
         }
         for (i = 0; i <= albums.length - 1; i++) {
             let dir = fs.readdirSync(`${__dirname}/mp3/${albums[i]}`);
             let hasCover = false;
-            dir.forEach(file => {
+            dir.forEach((file) => {
                 if (file.indexOf(".jpg") != -1 || file.indexOf(".png") != -1) {
                     covers[albums[i]] = `http://localhost:3000/mp3/${albums[i]}/${file}`;
                     hasCover = true;
@@ -126,18 +126,18 @@ const sendCovers = res => {
         }
         res.writeHead(200, {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
+            "Access-Control-Allow-Origin": "*",
         });
         res.write(JSON.stringify(covers));
         res.end();
     });
 };
 
-const sendPlaylistsData = res => {
-    playlistsDatabase.find({}, function(err, docs) {
+const sendPlaylistsData = (res) => {
+    playlistsDatabase.find({}, function (err, docs) {
         res.writeHead(200, {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
+            "Access-Control-Allow-Origin": "*",
         });
         res.write(JSON.stringify(docs));
         res.end();
@@ -147,11 +147,11 @@ const sendPlaylistsData = res => {
 const changePlaylistData = (req, res) => {
     var allData = "";
 
-    req.on("data", function(data) {
+    req.on("data", function (data) {
         allData += data;
     });
 
-    req.on("end", function(data) {
+    req.on("end", function (data) {
         var obj = JSON.parse(allData);
 
         if (obj.body.action == "ADD_TO_PLAYLIST") addToPlaylist(obj, res);
@@ -162,15 +162,15 @@ const changePlaylistData = (req, res) => {
 const addToPlaylist = (data, res) => {
     playlistsDatabase = new Datastore({
         filename: "playlists.db",
-        autoload: true
+        autoload: true,
     });
 
-    const checkIfIsAdded = async data => {
+    const checkIfIsAdded = async (data) => {
         let isAdded = false;
 
         let found = await new Promise((resolve, reject) => {
             playlistsDatabase.find({ playlistName: data.body.songData.playlistName }, (err, docs) => {
-                docs[0].files.forEach(el => {
+                docs[0].files.forEach((el) => {
                     if (el.file == data.body.songData.songName) {
                         isAdded = true;
                     }
@@ -182,26 +182,26 @@ const addToPlaylist = (data, res) => {
         return found;
     };
 
-    playlistsDatabase.find({ playlistName: data.body.songData.playlistName }, async function(err, docs) {
+    playlistsDatabase.find({ playlistName: data.body.songData.playlistName }, async function (err, docs) {
         if ((await checkIfIsAdded(data)) == false) {
             let newSongObj = {
                 file: data.body.songData.songName,
                 albumName: data.body.songData.albumName,
-                size: data.body.songData.size
+                size: data.body.songData.size,
             };
 
             docs[0].files.push(newSongObj);
 
-            playlistsDatabase.remove({ playlistName: data.body.songData.playlistName }, {}, function(err, numRemoved) {
+            playlistsDatabase.remove({ playlistName: data.body.songData.playlistName }, {}, function (err, numRemoved) {
                 console.log("usunięto dokumentów: ", numRemoved);
             });
 
-            playlistsDatabase.insert(docs, function(err, newDoc) {
-                playlistsDatabase.find({}, function(err, docs) {
+            playlistsDatabase.insert(docs, function (err, newDoc) {
+                playlistsDatabase.find({}, function (err, docs) {
                     console.log(JSON.stringify(docs, null, 5));
                     res.writeHead(200, {
                         "Content-Type": "application/json",
-                        "Access-Control-Allow-Origin": "*"
+                        "Access-Control-Allow-Origin": "*",
                     });
                     res.write(JSON.stringify(docs));
                     res.end();
@@ -211,7 +211,7 @@ const addToPlaylist = (data, res) => {
             console.log("ALREADY ADDED");
             res.writeHead(200, {
                 "Content-Type": "text/plain",
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
             });
             res.write("Duplication Error");
             res.end();
@@ -222,12 +222,12 @@ const addToPlaylist = (data, res) => {
 const removeFromPlaylist = (data, res) => {
     playlistsDatabase = new Datastore({
         filename: "playlists.db",
-        autoload: true
+        autoload: true,
     });
 
-    playlistsDatabase.find({ playlistName: data.body.songData.playlistName }, function(err, docs) {
+    playlistsDatabase.find({ playlistName: data.body.songData.playlistName }, function (err, docs) {
         let indexToDelete = null;
-        docs[0].files.forEach(song => {
+        docs[0].files.forEach((song) => {
             if (song.file == data.body.songData.songName) {
                 indexToDelete = docs[0].files.indexOf(song);
             }
@@ -235,16 +235,16 @@ const removeFromPlaylist = (data, res) => {
 
         docs[0].files.splice(indexToDelete, 1);
 
-        playlistsDatabase.remove({ playlistName: data.body.songData.playlistName }, function(err, numRemoved) {
+        playlistsDatabase.remove({ playlistName: data.body.songData.playlistName }, function (err, numRemoved) {
             console.log("deleted " + numRemoved + err);
         });
 
-        playlistsDatabase.insert(docs[0], function(err, newDoc) {
-            playlistsDatabase.find({}, function(err, docs) {
+        playlistsDatabase.insert(docs[0], function (err, newDoc) {
+            playlistsDatabase.find({}, function (err, docs) {
                 console.log(JSON.stringify(docs, null, 5));
                 res.writeHead(200, {
                     "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*"
+                    "Access-Control-Allow-Origin": "*",
                 });
                 res.write(JSON.stringify(docs));
                 res.end();
@@ -273,18 +273,18 @@ const uploadFiles = (req, res) => {
     form.keepExtensions = true;
     form.uploadDir = dir;
 
-    form.parse(req, function(err, fields, files) {
+    form.parse(req, function (err, fields, files) {
         console.log("Uploading: " + JSON.stringify(files, null, 5));
         res.writeHead(200, { "Content-Type": "application/json" });
         response = {};
-        Object.keys(files).forEach(key => {
-            fs.renameSync(files[key].path, `${dir}/${files[key].name}`, function(err) {
+        Object.keys(files).forEach((key) => {
+            fs.renameSync(files[key].path, `${dir}/${files[key].name}`, function (err) {
                 if (err) console.log(err);
             });
             response[key] = {
                 name: files[key].name,
                 size: files[key].size,
-                albumName: "Album" + currentIndex
+                albumName: "Album" + currentIndex,
             };
         });
 
@@ -292,19 +292,19 @@ const uploadFiles = (req, res) => {
     });
 };
 
-var server = http.createServer(function(req, res) {
+var server = http.createServer(function (req, res) {
     switch (req.method) {
         case "GET":
             console.log("GET");
             if (req.url.indexOf(".mp3") != -1) {
-                fs.readFile(__dirname + decodeURI(req.url), function(error, data) {
+                fs.readFile(__dirname + decodeURI(req.url), function (error, data) {
                     let stats = fs.statSync(__dirname + decodeURI(req.url));
                     res.writeHead(200, { "Content-Type": "audio/mpeg", "Content-Length": stats.size, "Accept-Ranges": "bytes" });
                     res.write(data);
                     res.end();
                 });
             } else if (req.url == "/admin") {
-                fs.readFile(__dirname + "/public/admin.html", function(error, data) {
+                fs.readFile(__dirname + "/public/admin.html", function (error, data) {
                     if (error) {
                         res.writeHead(404);
                         res.write("File Not Found");
@@ -314,7 +314,7 @@ var server = http.createServer(function(req, res) {
                     res.end();
                 });
             } else if (req.url.indexOf(".js") != -1) {
-                fs.readFile(__dirname + "/public" + req.url, function(error, data) {
+                fs.readFile(__dirname + "/public" + req.url, function (error, data) {
                     if (error) {
                         res.writeHead(404);
                         res.write("File Not Found");
@@ -324,7 +324,7 @@ var server = http.createServer(function(req, res) {
                     res.end();
                 });
             } else if (req.url.indexOf(".jpg") != -1 || req.url.indexOf(".png") != -1) {
-                fs.readFile(__dirname + decodeURI(req.url), function(error, data) {
+                fs.readFile(__dirname + decodeURI(req.url), function (error, data) {
                     console.log(__dirname + decodeURI(req.url));
                     if (error) {
                         res.writeHead(404);
@@ -349,7 +349,10 @@ var server = http.createServer(function(req, res) {
             } else if (req.url == "/modifyPlaylist") {
                 changePlaylistData(req, res);
             } else if (req.url == "/uploadFiles") {
-                uploadFiles(req, res);
+                //uploadFiles(req, res); //TEMPORARILY DISABLED
+                res.writeHead(404);
+                res.write("Doesnt exist");
+                res.end();
             } else {
                 res.writeHead(404);
                 res.write("Doesnt exist");
@@ -359,6 +362,6 @@ var server = http.createServer(function(req, res) {
     }
 });
 
-server.listen(3000, function() {
+server.listen(3000, function () {
     console.log("Start servera");
 });

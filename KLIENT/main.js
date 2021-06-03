@@ -17,9 +17,3 @@ new Vue({
     }
 }).$mount("#app");
 
-//TODO
-//make responsiveness
-//clean code
-
-//remove .mp3 postfix in code
-//add playlists mechanism
