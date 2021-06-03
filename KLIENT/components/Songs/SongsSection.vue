@@ -1,7 +1,7 @@
 <template>
     <section id="songs-section">
         <h1 id="tracks-header">Tracks</h1>
-        <vue-perfect-scrollbar id="overflow-wrapper" ref="scrollbarContainer">
+        <vue-perfect-scrollbar v-if="!isMobile" id="overflow-wrapper" ref="scrollbarContainer">
             <div v-if="isInfoUpdated" id="songs-wrapper">
                 <song-bar
                     v-for="name in this.$store.state.songs"
@@ -13,6 +13,18 @@
             </div>
             <h1 v-else id="not-found-info">Nie znaleziono</h1>
         </vue-perfect-scrollbar>
+        <section v-else id="overflow-wrapper" ref="scrollbarContainer">
+            <div v-if="isInfoUpdated" id="songs-wrapper">
+                <song-bar
+                    v-for="name in this.$store.state.songs"
+                    :album-name="$store.state.currentAlbum"
+                    :song-title="name.file"
+                    :size="name.size"
+                    :key="name.file"
+                ></song-bar>
+            </div>
+            <h1 v-else id="not-found-info">Nie znaleziono</h1>
+        </section>
     </section>
 </template>
 
@@ -27,7 +39,8 @@ export default {
     data() {
         return {
             songNames: this.$store.state.songs,
-            currentAlbum: this.$store.state.currentAlbum
+            currentAlbum: this.$store.state.currentAlbum,
+            isDeviceMobile: this.getDeviceType()
         };
     },
     computed: {
@@ -37,6 +50,22 @@ export default {
             } else {
                 return false;
             }
+        },
+        isMobile() {
+            var is_mobile = /Mobile|iPhone|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent || navigator.vendor || window.opera)
+                ? true
+                : false;
+
+            return is_mobile;
+        }
+    },
+    methods: {
+        getDeviceType: function() {
+            var is_mobile = /Mobile|iPhone|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent || navigator.vendor || window.opera)
+                ? true
+                : false;
+
+            return is_mobile;
         }
     },
     components: {
@@ -48,11 +77,18 @@ export default {
             //console.log(`info updated`)
         }
     },
-    mounted: function() {
+    updated: function() {
         this.$nextTick(function() {
-            const scrollbar = this.$refs.scrollbarContainer.$el.querySelector(".ps__rail-y");
-            scrollbar.style.backgroundColor = "transparent";
-            scrollbar.querySelector(".ps__thumb-y").style.backgroundColor = "#2b2836";
+            console.log(this.isDeviceMobile);
+            if (this.isDeviceMobile == false) {
+                const scrollbar = this.$refs.scrollbarContainer.$el.querySelector(".ps__rail-y");
+                scrollbar.style.backgroundColor = "transparent";
+                scrollbar.querySelector(".ps__thumb-y").style.backgroundColor = "#2b2836";
+            } else {
+                this.$refs.scrollbarContainer.style.overflow = "hidden";
+                this.$refs.scrollbarContainer.querySelector("#songs-wrapper").style.overflow = "auto";
+                this.$refs.scrollbarContainer.querySelector("#songs-wrapper").style.height = "100%";
+            }
         });
     }
 };
