@@ -2,7 +2,14 @@
     <section id="albums-section">
         <h1 id="albums-header">Albums</h1>
         <vue-perfect-scrollbar v-if="!isMobile" id="covers-section" ref="scrollbarContainer">
-            <album-cover v-for="album in getAlbums" :key="album" :cover-src="getCover(album)" :album-name="album"></album-cover>
+            <album-cover v-for="album in getAlbums" :key="album" :cover-src="getCover(album)" :album-name="album" :is-playlist="false"></album-cover>
+            <album-cover
+                v-for="playlist in getPlaylists"
+                :key="playlist.playlistName"
+                :cover-src="getPlaylistCover()"
+                :album-name="playlist.playlistName"
+                :is-playlist="true"
+            ></album-cover>
         </vue-perfect-scrollbar>
         <section v-else id="covers-section" ref="scrollbarContainer">
             <album-cover v-for="album in getAlbums" :key="album" :cover-src="getCover(album)" :album-name="album"></album-cover>
@@ -25,6 +32,9 @@ export default {
         getCover: function(albumName) {
             return this.$store.state.covers[albumName];
         },
+        getPlaylistCover: function() {
+            return "./playlistCover.jpg";
+        },
         getDeviceType: function() {
             var is_mobile = /Mobile|iPhone|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent || navigator.vendor || window.opera)
                 ? true
@@ -43,6 +53,9 @@ export default {
                 : false;
 
             return is_mobile;
+        },
+        getPlaylists() {
+            return this.$store.state.playlists;
         }
     },
     components: {

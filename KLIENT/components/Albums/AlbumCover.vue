@@ -7,7 +7,7 @@
 <script>
 export default {
     name: "AlbumCover",
-    props: ["coverSrc", "albumName"],
+    props: ["coverSrc", "albumName", "isPlaylist"],
     computed: {
         getCoverSrc() {
             return this.coverSrc;
@@ -15,10 +15,29 @@ export default {
     },
     methods: {
         getAlbumData: function() {
-            this.$store.dispatch({
-                type: "getAlbumInfo",
-                albumName: this.albumName
-            });
+            if (!this.isPlaylist) {
+                this.$store.dispatch({
+                    type: "getAlbumInfo",
+                    albumName: this.albumName
+                });
+            } else {
+                let files = [];
+
+                this.$store.state.playlists.forEach(el => {
+                    let playlistName = decodeURIComponent(el.playlistName);
+                    let targetName = this.albumName;
+
+                    if (playlistName == targetName) {
+                        files = el["files"];
+                    }
+                });
+
+                this.$store.dispatch({
+                    type: "showPlaylist",
+                    albumName: this.albumName,
+                    files: files
+                });
+            }
         }
     }
 };
