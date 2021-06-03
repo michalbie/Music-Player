@@ -114,6 +114,10 @@ $left-padding: 0.8em;
         padding-top: 0;
     }
 
+    @include w480P {
+        padding-bottom: 7em;
+    }
+
     #tracks-header {
         @include h500 {
             display: none;
