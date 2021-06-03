@@ -207,12 +207,13 @@ export default {
 
         @include w767P {
             margin-right: 0;
+            margin-bottom: 1em;
         }
 
         .panel-controls {
             width: 1.2em;
             height: 1.2em;
-            margin-right: 1em;
+            //margin-right: 1em;
 
             @include w1024P {
                 width: 1em;
@@ -222,7 +223,6 @@ export default {
             @include w767P {
                 width: 1.5em;
                 height: 1.5em;
-                margin-bottom: 1em;
             }
         }
 
@@ -234,6 +234,7 @@ export default {
             width: 2.5em;
             height: 2.5em;
             transition: all 0.5s ease;
+            margin: 0 1em 0 1em;
 
             @include w1024P {
                 width: 2em;
