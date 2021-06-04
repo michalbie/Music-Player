@@ -323,14 +323,12 @@ export default {
                 width: 100%;
                 height: 100%;
                 background-color: #5a5a5a;
-                opacity: 30%;
             }
 
             #song-length-current {
                 position: absolute;
                 height: 100%;
                 background-color: #ffffff;
-                opacity: 30%;
             }
         }
 
