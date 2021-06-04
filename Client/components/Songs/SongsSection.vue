@@ -11,7 +11,7 @@
                     :key="name.file"
                 ></song-bar>
             </div>
-            <h1 v-else id="not-found-info">Nie znaleziono</h1>
+            <h1 v-else id="not-found-info">No tracks found</h1>
         </vue-perfect-scrollbar>
         <section v-else id="overflow-wrapper" ref="scrollbarContainer">
             <div v-if="isInfoUpdated" id="songs-wrapper">
@@ -23,7 +23,7 @@
                     :key="name.file"
                 ></song-bar>
             </div>
-            <h1 v-else id="not-found-info">Nie znaleziono</h1>
+            <h1 v-else id="not-found-info">No tracks found</h1>
         </section>
     </section>
 </template>

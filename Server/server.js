@@ -4,6 +4,8 @@ var qs = require("querystring");
 var Datastore = require("nedb");
 var formidable = require("formidable");
 
+const PORT = (port = process.env.PORT || 3000);
+
 var playlistsDatabase = new Datastore({
     filename: "playlists.db",
     autoload: true,
@@ -362,6 +364,6 @@ var server = http.createServer(function (req, res) {
     }
 });
 
-server.listen(3000, function () {
+server.listen(PORT, function () {
     console.log("Start servera");
 });
