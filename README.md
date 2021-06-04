@@ -1,4 +1,7 @@
-# webplayer
+# Music Player
+
+## About
+Minimalistic music player proposition made in Vue.js which downloads music from Node.js server.
 
 ## Project setup
 ```
