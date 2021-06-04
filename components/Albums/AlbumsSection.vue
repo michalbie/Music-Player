@@ -33,7 +33,7 @@ export default {
             return this.$store.state.covers[albumName];
         },
         getPlaylistCover: function() {
-            return "./playlistCover.jpg";
+            return "https://michalbie-music-player.herokuapp.com/playlistCover.jpg";
         },
         getDeviceType: function() {
             var is_mobile = /Mobile|iPhone|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent || navigator.vendor || window.opera)
