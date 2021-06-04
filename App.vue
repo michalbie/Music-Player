@@ -59,7 +59,7 @@ body {
 
     #app-background {
         position: absolute;
-        width: 100vw;
+        width: 97%;
         height: 100vh;
         /*background-image: url("./assets/background.jpg");
 			background-size: cover;
