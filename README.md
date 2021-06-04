@@ -4,12 +4,7 @@ Minimalistic music player proposition made in Vue.js which downloads music from 
 If you want to see server side of this project go to https://github.com/michalbie/Music-Player-Server
 
 ## Technologies used
-* HTML
-* [Vue](https://vuejs.org/ "Vue")
-* [SCSS](https://sass-lang.com/ "SCSS")
-* JavaScript
-* [Node](https://nodejs.org/ "Node")
-* FetchAPI
+<img src="https://img.shields.io/badge/javascript%20-%23323330.svg?&style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" height="30"/> <img src="https://img.shields.io/badge/html5%20-%23E34F26.svg?&style=for-the-badge&logo=html5&logoColor=white" height="30"/> <img src="https://img.shields.io/badge/css3%20-%231572B6.svg?&style=for-the-badge&logo=css3&logoColor=white" height="30"/> <img src="https://img.shields.io/badge/vuejs%20-%2335495e.svg?&style=for-the-badge&logo=vue.js&logoColor=%234FC08D" height="30"/> <img src="https://img.shields.io/badge/SASS%20-hotpink.svg?&style=for-the-badge&logo=SASS&logoColor=white" height="30"/>  <img src="https://img.shields.io/badge/node.js%20-%2343853D.svg?&style=for-the-badge&logo=node.js&logoColor=white" height="30"/> <img src="https://img.shields.io/badge/heroku%20-%23430098.svg?&style=for-the-badge&logo=heroku&logoColor=white" height="30"/> <img alt="Vercel" src="https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white" height="30"/>
 
 ## App look
 ![Desktop](assets/screenshots/desktop1.PNG "Desktop")
